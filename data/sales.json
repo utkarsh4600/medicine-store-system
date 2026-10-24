@@ -1,0 +1,125 @@
+[
+  {
+    "sale_id": "SALE-97AA7C",
+    "customer_id": "CUST-001",
+    "customer_name": "Rahul Sharma",
+    "items": [
+      {
+        "medicine_id": "MED-101",
+        "name": "Paracetamol 650mg",
+        "company": "Cipla Ltd.",
+        "category": "Antipyretic / Analgesic",
+        "unit_price": 32.5,
+        "quantity": 2,
+        "line_total": 65.0
+      }
+    ],
+    "subtotal": 65.0,
+    "gst": 11.7,
+    "total": 76.7,
+    "sale_date": "2026-10-24 20:24:12",
+    "prescription_id": null
+  },
+  {
+    "sale_id": "SALE-B01F01",
+    "customer_id": "CUST-001",
+    "customer_name": "Rahul Sharma",
+    "items": [
+      {
+        "medicine_id": "MED-101",
+        "name": "Paracetamol 650mg",
+        "company": "Cipla Ltd.",
+        "category": "Antipyretic / Analgesic",
+        "unit_price": 32.5,
+        "quantity": 2,
+        "line_total": 65.0
+      }
+    ],
+    "subtotal": 65.0,
+    "gst": 11.7,
+    "total": 76.7,
+    "sale_date": "2026-10-24 20:24:29",
+    "prescription_id": null
+  },
+  {
+    "sale_id": "SALE-F44887",
+    "customer_id": "CUST-001",
+    "customer_name": "Rahul Sharma",
+    "items": [
+      {
+        "medicine_id": "MED-101",
+        "name": "Paracetamol 650mg",
+        "company": "Cipla Ltd.",
+        "category": "Antipyretic / Analgesic",
+        "unit_price": 32.5,
+        "quantity": 1,
+        "line_total": 32.5
+      }
+    ],
+    "subtotal": 32.5,
+    "gst": 5.85,
+    "total": 33.35,
+    "sale_date": "2026-10-24 20:29:08",
+    "prescription_id": null
+  },
+  {
+    "sale_id": "SALE-03DAB0",
+    "customer_id": "WALKIN",
+    "customer_name": "Walk-in Customer",
+    "items": [
+      {
+        "medicine_id": "MED-101",
+        "name": "Paracetamol 650mg",
+        "company": "Cipla Ltd.",
+        "category": "Antipyretic / Analgesic",
+        "unit_price": 32.5,
+        "quantity": 1,
+        "line_total": 32.5
+      }
+    ],
+    "subtotal": 32.5,
+    "gst": 5.85,
+    "total": 38.35,
+    "sale_date": "2026-10-24 20:49:21",
+    "prescription_id": null
+  },
+  {
+    "sale_id": "SALE-F4A2B7",
+    "customer_id": "CUST-001",
+    "customer_name": "Rahul Sharma",
+    "items": [
+      {
+        "medicine_id": "MED-102",
+        "name": "Amoxicillin 500mg",
+        "company": "Sun Pharma",
+        "category": "Antibiotic",
+        "unit_price": 85.0,
+        "quantity": 1,
+        "line_total": 85.0
+      },
+      {
+        "medicine_id": "MED-103",
+        "name": "Cetirizine 10mg",
+        "company": "Dr. Reddy's",
+        "category": "Antihistamine",
+        "unit_price": 18.0,
+        "quantity": 1,
+        "line_total": 18.0
+      },
+      {
+        "medicine_id": "MED-106",
+        "name": "Omeprazole 20mg",
+        "company": "Alkem Labs",
+        "category": "Antacid / PPI",
+        "unit_price": 55.0,
+        "quantity": 1,
+        "line_total": 55.0
+      }
+    ],
+    "subtotal": 158.0,
+    "gst": 18.96,
+    "total": 169.96,
+    "sale_date": "2026-10-24 20:50:07",
+    "prescription_id": "RX-501"
+  }
+]

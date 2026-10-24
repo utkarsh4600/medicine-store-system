@@ -1,0 +1,23 @@
+[
+  {
+    "prescription_id": "RX-501",
+    "doctor_name": "Dr. A. K. Verma (MD General)",
+    "patient_name": "Rahul Sharma",
+    "prescribed_medicines": [
+      "Amoxicillin 500mg",
+      "Paracetamol 650mg"
+    ],
+    "verified": true,
+    "date_issued": "2026-10-24"
+  },
+  {
+    "prescription_id": "RX-502",
+    "doctor_name": "Dr. Sneha Roy (Endocrinologist)",
+    "patient_name": "Amitabh Sen",
+    "prescribed_medicines": [
+      "Metformin 500mg"
+    ],
+    "verified": true,
+    "date_issued": "2026-10-24"
+  }
+]

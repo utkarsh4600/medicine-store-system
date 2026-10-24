@@ -1,0 +1,27 @@
+[
+  {
+    "supplier_id": "SUP-101",
+    "name": "Apex Pharma Distributors",
+    "mobile": "+91 98111 22334",
+    "address": "Warehouse 4B, Industrial Estate, Mumbai",
+    "company": "Apex Healthcare Logistics",
+    "supplied_medicines": [
+      "MED-101",
+      "MED-102",
+      "MED-105"
+    ]
+  },
+  {
+    "supplier_id": "SUP-102",
+    "name": "MediLife Supply Corp",
+    "mobile": "+91 98222 33445",
+    "address": "Plot 12, GIDC Pharma Hub, Ahmedabad",
+    "company": "MediLife Global",
+    "supplied_medicines": [
+      "MED-103",
+      "MED-104",
+      "MED-106",
+      "MED-107"
+    ]
+  }
+]

@@ -1,0 +1,821 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>PharmaMS — Medicine Store Management System</title>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+
+  <!-- SIDEBAR NAVIGATION -->
+  <aside id="sidebar">
+    <div class="brand">
+      <div class="brand-icon">💊</div>
+      <div class="brand-text">Pharma<span>MS</span></div>
+    </div>
+
+    <ul class="nav-menu">
+      <li>
+        <a class="nav-item active" data-tab="tab-dashboard">
+          <span class="icon">📊</span>
+          <span>Dashboard</span>
+        </a>
+      </li>
+      <li>
+        <a class="nav-item" data-tab="tab-pos">
+          <span class="icon">🛒</span>
+          <span>POS / Billing</span>
+        </a>
+      </li>
+      <li>
+        <a class="nav-item" data-tab="tab-medicines">
+          <span class="icon">💊</span>
+          <span>Medicines &amp; Stock</span>
+          <span class="badge-count" id="sidebar-alert-badge" style="display:none;">0</span>
+        </a>
+      </li>
+      <li>
+        <a class="nav-item" data-tab="tab-customers">
+          <span class="icon">👥</span>
+          <span>Customers</span>
+        </a>
+      </li>
+      <li>
+        <a class="nav-item" data-tab="tab-suppliers">
+          <span class="icon">🚚</span>
+          <span>Suppliers</span>
+        </a>
+      </li>
+      <li>
+        <a class="nav-item" data-tab="tab-prescriptions">
+          <span class="icon">📋</span>
+          <span>Prescriptions</span>
+        </a>
+      </li>
+      <li>
+        <a class="nav-item" data-tab="tab-bills">
+          <span class="icon">🧾</span>
+          <span>Invoices &amp; Bills</span>
+        </a>
+      </li>
+      <li>
+        <a class="nav-item" data-tab="tab-reports">
+          <span class="icon">📈</span>
+          <span>Reports &amp; Export</span>
+        </a>
+      </li>
+      <li>
+        <a class="nav-item" data-tab="tab-docs">
+          <span class="icon">📖</span>
+          <span>OOP Architecture</span>
+        </a>
+      </li>
+    </ul>
+
+    <div class="sidebar-footer">
+      <div class="system-status">
+        <span class="status-dot"></span>
+        <span id="backend-status-text">Connected: REST API</span>
+      </div>
+      <div>Python OOP · JSON Storage</div>
+    </div>
+  </aside>
+
+  <!-- MAIN WRAPPER -->
+  <main id="main-content">
+
+    <!-- TOP HEADER BAR -->
+    <header class="top-bar">
+      <div class="top-left">
+        <button class="mobile-toggle" onclick="toggleSidebar()">☰</button>
+        <h1 class="page-title" id="page-title">Dashboard Overview</h1>
+      </div>
+      <div class="top-actions">
+        <button class="btn btn-secondary btn-sm" onclick="saveStoreData()">💾 Save Data</button>
+        <button class="btn btn-outline btn-sm" onclick="loadAllData()">🔄 Refresh</button>
+        <button class="btn btn-primary btn-sm" onclick="switchTab('tab-pos')">⚡ Quick Sale</button>
+      </div>
+    </header>
+
+    <!-- CONTENT BODY -->
+    <div class="content-body">
+
+      <!-- ======================================================== -->
+      <!-- TAB 1: DASHBOARD -->
+      <!-- ======================================================== -->
+      <section id="tab-dashboard" class="tab-pane active">
+
+        <!-- KPI SUMMARY GRID -->
+        <div class="kpi-grid">
+          <div class="kpi-card green">
+            <div class="kpi-icon-wrap">₹</div>
+            <div class="kpi-data">
+              <div class="kpi-title">Total Revenue</div>
+              <div class="kpi-value" id="kpi-revenue">₹0.00</div>
+              <div class="kpi-sub">All processed sales</div>
+            </div>
+          </div>
+          <div class="kpi-card blue">
+            <div class="kpi-icon-wrap">💊</div>
+            <div class="kpi-data">
+              <div class="kpi-title">Active Medicines</div>
+              <div class="kpi-value" id="kpi-medicines">0</div>
+              <div class="kpi-sub">Catalog inventory items</div>
+            </div>
+          </div>
+          <div class="kpi-card amber">
+            <div class="kpi-icon-wrap">⚠️</div>
+            <div class="kpi-data">
+              <div class="kpi-title">Low Stock Alert</div>
+              <div class="kpi-value" id="kpi-low-stock">0</div>
+              <div class="kpi-sub">Items at/below reorder</div>
+            </div>
+          </div>
+          <div class="kpi-card red">
+            <div class="kpi-icon-wrap">⛔</div>
+            <div class="kpi-data">
+              <div class="kpi-title">Expired Items</div>
+              <div class="kpi-value" id="kpi-expired">0</div>
+              <div class="kpi-sub">Requires disposal/return</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- CONDITIONAL ALERT BANNER -->
+        <div id="dashboard-alert-banner" style="display:none;" class="alert-banner warning">
+          <span style="font-size:1.3rem;">⚠️</span>
+          <div style="flex:1;">
+            <strong>Inventory Attention Required:</strong>
+            <span id="alert-banner-text">You have low stock or expired medications.</span>
+          </div>
+          <button class="btn btn-sm btn-secondary" onclick="switchTab('tab-medicines')">Review Stock</button>
+        </div>
+
+        <!-- RECENT SALES CARD -->
+        <div class="card">
+          <div class="card-header">
+            <div class="card-title"><span>🧾</span> Recent Sales &amp; Invoices</div>
+            <button class="btn btn-sm btn-outline" onclick="switchTab('tab-bills')">View All Invoices →</button>
+          </div>
+          <div class="card-body" style="padding:0;">
+            <div class="table-responsive">
+              <table class="data-table">
+                <thead>
+                  <tr>
+                    <th>Sale ID</th>
+                    <th>Customer</th>
+                    <th>Items</th>
+                    <th>Total</th>
+                    <th>Date</th>
+                    <th>Action</th>
+                  </tr>
+                </thead>
+                <tbody id="dashboard-recent-sales">
+                  <tr><td colspan="6" style="text-align:center; padding:24px;">No recent sales yet. Process a sale in POS.</td></tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+
+      </section>
+
+      <!-- ======================================================== -->
+      <!-- TAB 2: POINT OF SALE (POS) -->
+      <!-- ======================================================== -->
+      <section id="tab-pos" class="tab-pane">
+        <div class="pos-layout">
+
+          <!-- LEFT: MEDICINE CATALOG SELECTOR -->
+          <div class="card">
+            <div class="card-header">
+              <div class="card-title"><span>💊</span> Medicine Selector</div>
+              <div class="filter-bar" style="margin-bottom:0;">
+                <div class="search-box">
+                  <span class="search-icon">🔍</span>
+                  <input type="text" id="pos-search" placeholder="Search medicine by name or ID..." oninput="renderPosGrid()" />
+                </div>
+                <select id="pos-category-filter" class="select-filter" onchange="renderPosGrid()">
+                  <option value="All">All Categories</option>
+                </select>
+              </div>
+            </div>
+            <div class="card-body">
+              <div id="pos-grid" class="pos-grid">
+                <!-- Populated dynamically -->
+              </div>
+            </div>
+          </div>
+
+          <!-- RIGHT: ACTIVE CART & CHECKOUT -->
+          <div class="cart-box">
+            <h3 style="font-size:1.15rem; font-weight:700; margin-bottom:16px; display:flex; align-items:center; gap:8px;">
+              <span>🛒</span> Current Bill / Cart
+            </h3>
+
+            <!-- Customer & Prescription selection -->
+            <div class="form-group">
+              <label>Select Customer</label>
+              <div style="display:flex; gap:8px;">
+                <select id="pos-customer-select" class="form-control"></select>
+                <button class="btn btn-sm btn-secondary" title="Add New Customer" onclick="openModal('modal-add-customer')">+</button>
+              </div>
+            </div>
+
+            <div class="form-group">
+              <label>Prescription (Optional)</label>
+              <select id="pos-prescription-select" class="form-control">
+                <option value="">No Prescription / Over The Counter</option>
+              </select>
+            </div>
+
+            <!-- Cart items list -->
+            <div id="pos-cart-items" class="cart-items">
+              <div style="text-align:center; color:var(--text-muted); padding:30px 10px;">
+                Cart is empty. Click any medicine on the left to add it.
+              </div>
+            </div>
+
+            <!-- Calculations -->
+            <div class="cart-summary-line">
+              <span>Subtotal:</span>
+              <strong id="pos-subtotal">₹0.00</strong>
+            </div>
+
+            <div class="cart-summary-line" style="align-items:center;">
+              <span>GST Slab:</span>
+              <select id="pos-gst-rate" class="form-control" style="width:110px; padding:4px 8px;" onchange="calculateCartTotals()">
+                <option value="0.00">0% (Nil)</option>
+                <option value="0.05">5%</option>
+                <option value="0.12">12%</option>
+                <option value="0.18" selected>18% (Standard)</option>
+              </select>
+            </div>
+
+            <div class="cart-summary-line">
+              <span>GST Tax Amount:</span>
+              <strong id="pos-gst-amount">₹0.00</strong>
+            </div>
+
+            <div class="cart-summary-line" style="align-items:center;">
+              <span>Discount (₹):</span>
+              <input type="number" id="pos-discount" class="form-control" style="width:110px; padding:4px 8px;" min="0" value="0" oninput="calculateCartTotals()" />
+            </div>
+
+            <div class="cart-summary-line" style="align-items:center;">
+              <span>Payment Mode:</span>
+              <select id="pos-payment-method" class="form-control" style="width:120px; padding:4px 8px;">
+                <option value="Cash">Cash</option>
+                <option value="UPI / QR">UPI / QR</option>
+                <option value="Card">Card</option>
+                <option value="NetBanking">NetBanking</option>
+              </select>
+            </div>
+
+            <div class="cart-summary-line total">
+              <span>Net Payable:</span>
+              <span id="pos-grand-total">₹0.00</span>
+            </div>
+
+            <div style="display:flex; gap:10px; margin-top:20px;">
+              <button class="btn btn-outline" style="flex:1;" onclick="clearCart()">Clear</button>
+              <button class="btn btn-primary" style="flex:2;" onclick="processSaleCheckout()">Process &amp; Print Bill</button>
+            </div>
+          </div>
+
+        </div>
+      </section>
+
+      <!-- ======================================================== -->
+      <!-- TAB 3: MEDICINES & INVENTORY -->
+      <!-- ======================================================== -->
+      <section id="tab-medicines" class="tab-pane">
+        <div class="card">
+          <div class="card-header">
+            <div class="card-title"><span>💊</span> Medicine Catalog &amp; Stock Levels</div>
+            <div style="display:flex; gap:10px;">
+              <button class="btn btn-outline btn-sm" onclick="exportResource('medicines')">Export CSV</button>
+              <button class="btn btn-primary btn-sm" onclick="openModal('modal-add-medicine')">+ Add Medicine</button>
+            </div>
+          </div>
+          <div class="card-body">
+            <!-- Filter Bar -->
+            <div class="filter-bar">
+              <div class="search-box">
+                <span class="search-icon">🔍</span>
+                <input type="text" id="med-search" placeholder="Search medicines by name, brand, or code..." oninput="filterMedicinesTable()" />
+              </div>
+              <select id="med-filter-category" class="select-filter" onchange="filterMedicinesTable()">
+                <option value="All">All Categories</option>
+              </select>
+              <select id="med-filter-status" class="select-filter" onchange="filterMedicinesTable()">
+                <option value="all">All Status</option>
+                <option value="low_stock">⚠️ Low Stock Only</option>
+                <option value="expired">⛔ Expired Only</option>
+              </select>
+            </div>
+
+            <!-- Medicines Table -->
+            <div class="table-responsive">
+              <table class="data-table">
+                <thead>
+                  <tr>
+                    <th>ID</th>
+                    <th>Medicine Name</th>
+                    <th>Company</th>
+                    <th>Category</th>
+                    <th>Price</th>
+                    <th>Stock</th>
+                    <th>Expiry Date</th>
+                    <th>Prescription</th>
+                    <th>Status</th>
+                    <th>Actions</th>
+                  </tr>
+                </thead>
+                <tbody id="medicines-table-body">
+                  <!-- Populated dynamically -->
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ======================================================== -->
+      <!-- TAB 4: CUSTOMERS -->
+      <!-- ======================================================== -->
+      <section id="tab-customers" class="tab-pane">
+        <div class="card">
+          <div class="card-header">
+            <div class="card-title"><span>👥</span> Customer Directory</div>
+            <div style="display:flex; gap:10px;">
+              <button class="btn btn-outline btn-sm" onclick="exportResource('customers')">Export CSV</button>
+              <button class="btn btn-primary btn-sm" onclick="openModal('modal-add-customer')">+ Add Customer</button>
+            </div>
+          </div>
+          <div class="card-body">
+            <div class="filter-bar">
+              <div class="search-box">
+                <span class="search-icon">🔍</span>
+                <input type="text" id="cust-search" placeholder="Search customer by name or phone..." oninput="filterCustomersTable()" />
+              </div>
+            </div>
+            <div class="table-responsive">
+              <table class="data-table">
+                <thead>
+                  <tr>
+                    <th>Customer ID</th>
+                    <th>Name</th>
+                    <th>Mobile</th>
+                    <th>Address</th>
+                    <th>Orders</th>
+                    <th>Actions</th>
+                  </tr>
+                </thead>
+                <tbody id="customers-table-body">
+                  <!-- Populated dynamically -->
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ======================================================== -->
+      <!-- TAB 5: SUPPLIERS -->
+      <!-- ======================================================== -->
+      <section id="tab-suppliers" class="tab-pane">
+        <div class="card">
+          <div class="card-header">
+            <div class="card-title"><span>🚚</span> Supplier Management</div>
+            <div style="display:flex; gap:10px;">
+              <button class="btn btn-outline btn-sm" onclick="exportResource('suppliers')">Export CSV</button>
+              <button class="btn btn-primary btn-sm" onclick="openModal('modal-add-supplier')">+ Add Supplier</button>
+            </div>
+          </div>
+          <div class="card-body">
+            <div class="table-responsive">
+              <table class="data-table">
+                <thead>
+                  <tr>
+                    <th>Supplier ID</th>
+                    <th>Contact Person</th>
+                    <th>Company Name</th>
+                    <th>Mobile</th>
+                    <th>Address</th>
+                    <th>Supplied Medicines</th>
+                    <th>Actions</th>
+                  </tr>
+                </thead>
+                <tbody id="suppliers-table-body">
+                  <!-- Populated dynamically -->
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ======================================================== -->
+      <!-- TAB 6: PRESCRIPTIONS -->
+      <!-- ======================================================== -->
+      <section id="tab-prescriptions" class="tab-pane">
+        <div class="card">
+          <div class="card-header">
+            <div class="card-title"><span>📋</span> Doctor Prescriptions</div>
+            <div style="display:flex; gap:10px;">
+              <button class="btn btn-outline btn-sm" onclick="exportResource('prescriptions')">Export CSV</button>
+              <button class="btn btn-primary btn-sm" onclick="openModal('modal-add-prescription')">+ Add Prescription</button>
+            </div>
+          </div>
+          <div class="card-body">
+            <div class="table-responsive">
+              <table class="data-table">
+                <thead>
+                  <tr>
+                    <th>Rx ID</th>
+                    <th>Doctor Name</th>
+                    <th>Patient Name</th>
+                    <th>Prescribed Medicines</th>
+                    <th>Date Issued</th>
+                    <th>Status</th>
+                    <th>Actions</th>
+                  </tr>
+                </thead>
+                <tbody id="prescriptions-table-body">
+                  <!-- Populated dynamically -->
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ======================================================== -->
+      <!-- TAB 7: BILLS & RECEIPTS -->
+      <!-- ======================================================== -->
+      <section id="tab-bills" class="tab-pane">
+        <div class="card">
+          <div class="card-header">
+            <div class="card-title"><span>🧾</span> Invoices &amp; Billing History</div>
+            <button class="btn btn-outline btn-sm" onclick="exportResource('bills')">Export Invoices CSV</button>
+          </div>
+          <div class="card-body">
+            <div class="table-responsive">
+              <table class="data-table">
+                <thead>
+                  <tr>
+                    <th>Bill ID</th>
+                    <th>Sale ID</th>
+                    <th>Customer</th>
+                    <th>Subtotal</th>
+                    <th>GST</th>
+                    <th>Total</th>
+                    <th>Payment</th>
+                    <th>Date</th>
+                    <th>Receipt</th>
+                  </tr>
+                </thead>
+                <tbody id="bills-table-body">
+                  <!-- Populated dynamically -->
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ======================================================== -->
+      <!-- TAB 8: REPORTS & EXPORTS -->
+      <!-- ======================================================== -->
+      <section id="tab-reports" class="tab-pane">
+        <div class="card">
+          <div class="card-header">
+            <div class="card-title"><span>📈</span> Reports &amp; CSV Data Exports</div>
+          </div>
+          <div class="card-body">
+            <p style="color:var(--text-muted); margin-bottom:20px;">
+              Download production-ready CSV spreadsheets of your pharmacy datasets generated directly by the Python backend.
+            </p>
+            <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(220px, 1fr)); gap:16px;">
+              <div class="kpi-card">
+                <div class="kpi-icon-wrap" style="background:#ecfdf5; color:var(--primary);">💊</div>
+                <div class="kpi-data">
+                  <div class="kpi-title">Medicines Catalog</div>
+                  <button class="btn btn-sm btn-primary" style="margin-top:8px;" onclick="exportResource('medicines')">Download CSV</button>
+                </div>
+              </div>
+              <div class="kpi-card">
+                <div class="kpi-icon-wrap" style="background:#eff6ff; color:var(--info);">🛒</div>
+                <div class="kpi-data">
+                  <div class="kpi-title">Sales Report</div>
+                  <button class="btn btn-sm btn-primary" style="margin-top:8px;" onclick="exportResource('sales')">Download CSV</button>
+                </div>
+              </div>
+              <div class="kpi-card">
+                <div class="kpi-icon-wrap" style="background:#fef3c7; color:var(--warning);">👥</div>
+                <div class="kpi-data">
+                  <div class="kpi-title">Customers List</div>
+                  <button class="btn btn-sm btn-primary" style="margin-top:8px;" onclick="exportResource('customers')">Download CSV</button>
+                </div>
+              </div>
+              <div class="kpi-card">
+                <div class="kpi-icon-wrap" style="background:#f1f5f9; color:#475569;">🚚</div>
+                <div class="kpi-data">
+                  <div class="kpi-title">Suppliers Directory</div>
+                  <button class="btn btn-sm btn-primary" style="margin-top:8px;" onclick="exportResource('suppliers')">Download CSV</button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ======================================================== -->
+      <!-- TAB 9: OOP ARCHITECTURE & DOCUMENTATION -->
+      <!-- ======================================================== -->
+      <section id="tab-docs" class="tab-pane">
+        <div class="card">
+          <div class="card-header">
+            <div class="card-title"><span>📖</span> OOP Architecture &amp; Python Implementation</div>
+          </div>
+          <div class="card-body">
+            <p style="color:var(--text-muted); margin-bottom:20px;">
+              This system is engineered following strict Object-Oriented Principles, Clean Architecture, and Python standards.
+            </p>
+            <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(280px, 1fr)); gap:16px;">
+              <div style="background:#f8fafc; border:1px solid var(--border); border-radius:10px; padding:16px;">
+                <h4 style="color:var(--primary); margin-bottom:6px;">1. Abstraction &amp; Inheritance</h4>
+                <p style="font-size:0.85rem; color:var(--text-muted);">
+                  <code>Person</code> (ABC) defines abstract methods implemented polymorphically by <code>Customer</code> and <code>Supplier</code>.
+                </p>
+              </div>
+              <div style="background:#f8fafc; border:1px solid var(--border); border-radius:10px; padding:16px;">
+                <h4 style="color:var(--primary); margin-bottom:6px;">2. Encapsulation</h4>
+                <p style="font-size:0.85rem; color:var(--text-muted);">
+                  Protected attributes (<code>_person_id</code>, <code>_name</code>, <code>_mobile_number</code>) guarded with Python properties &amp; setters.
+                </p>
+              </div>
+              <div style="background:#f8fafc; border:1px solid var(--border); border-radius:10px; padding:16px;">
+                <h4 style="color:var(--primary); margin-bottom:6px;">3. Custom Domain Exceptions</h4>
+                <p style="font-size:0.85rem; color:var(--text-muted);">
+                  <code>MedicineNotFoundError</code>, <code>OutOfStockError</code>, <code>ExpiredMedicineError</code>, <code>InvalidPrescriptionError</code>.
+                </p>
+              </div>
+              <div style="background:#f8fafc; border:1px solid var(--border); border-radius:10px; padding:16px;">
+                <h4 style="color:var(--primary); margin-bottom:6px;">4. Decorators &amp; Generators</h4>
+                <p style="font-size:0.85rem; color:var(--text-muted);">
+                  <code>@log_action</code> decorator records timestamped telemetry; <code>sales_report_generator()</code> yields records with generator memory efficiency.
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+    </div>
+  </main>
+
+  <!-- ======================================================== -->
+  <!-- MODALS -->
+  <!-- ======================================================== -->
+
+  <!-- MODAL: ADD / EDIT MEDICINE -->
+  <div id="modal-add-medicine" class="modal-backdrop">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h3 class="modal-title" id="medicine-modal-title">Add New Medicine</h3>
+        <button class="modal-close" onclick="closeModal('modal-add-medicine')">&times;</button>
+      </div>
+      <form id="form-medicine" onsubmit="handleSaveMedicine(event)">
+        <div class="modal-body">
+          <input type="hidden" id="med-form-mode" value="add" />
+          <div class="form-row">
+            <div class="form-group">
+              <label>Medicine ID</label>
+              <input type="text" id="med-id" class="form-control" placeholder="Auto-generated if empty" />
+            </div>
+            <div class="form-group">
+              <label>Medicine Name *</label>
+              <input type="text" id="med-name" class="form-control" placeholder="e.g. Paracetamol 650mg" required />
+            </div>
+          </div>
+          <div class="form-row">
+            <div class="form-group">
+              <label>Manufacturer / Company *</label>
+              <input type="text" id="med-company" class="form-control" placeholder="e.g. Cipla Ltd." required />
+            </div>
+            <div class="form-group">
+              <label>Category *</label>
+              <input type="text" id="med-category" class="form-control" placeholder="e.g. Antibiotic, Antipyretic" required />
+            </div>
+          </div>
+          <div class="form-row">
+            <div class="form-group">
+              <label>Unit Price (₹) *</label>
+              <input type="number" id="med-price" class="form-control" step="0.01" min="0" placeholder="0.00" required />
+            </div>
+            <div class="form-group">
+              <label>Stock Quantity *</label>
+              <input type="number" id="med-quantity" class="form-control" min="0" placeholder="0" required />
+            </div>
+          </div>
+          <div class="form-row">
+            <div class="form-group">
+              <label>Expiry Date *</label>
+              <input type="date" id="med-expiry" class="form-control" required />
+            </div>
+            <div class="form-group">
+              <label>Reorder Warning Level</label>
+              <input type="number" id="med-reorder" class="form-control" min="1" value="15" />
+            </div>
+          </div>
+          <div class="form-group">
+            <label style="display:flex; align-items:center; gap:8px; cursor:pointer;">
+              <input type="checkbox" id="med-prescription" />
+              <span>Requires Doctor Prescription (Schedule H / Rx)</span>
+            </label>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" onclick="closeModal('modal-add-medicine')">Cancel</button>
+          <button type="submit" class="btn btn-primary">Save Medicine</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- MODAL: ADJUST STOCK -->
+  <div id="modal-adjust-stock" class="modal-backdrop">
+    <div class="modal-content" style="max-width:400px;">
+      <div class="modal-header">
+        <h3 class="modal-title">Adjust Stock</h3>
+        <button class="modal-close" onclick="closeModal('modal-adjust-stock')">&times;</button>
+      </div>
+      <form onsubmit="handleStockAdjust(event)">
+        <div class="modal-body">
+          <input type="hidden" id="adjust-med-id" />
+          <p id="adjust-med-name" style="font-weight:600; margin-bottom:12px;"></p>
+          <div class="form-group">
+            <label>Quantity Delta (e.g. +50 for new stock, -10 for damaged)</label>
+            <input type="number" id="adjust-qty-delta" class="form-control" placeholder="+20 or -5" required />
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" onclick="closeModal('modal-adjust-stock')">Cancel</button>
+          <button type="submit" class="btn btn-primary">Update Stock</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- MODAL: ADD CUSTOMER -->
+  <div id="modal-add-customer" class="modal-backdrop">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h3 class="modal-title">Register Customer</h3>
+        <button class="modal-close" onclick="closeModal('modal-add-customer')">&times;</button>
+      </div>
+      <form onsubmit="handleSaveCustomer(event)">
+        <div class="modal-body">
+          <div class="form-group">
+            <label>Full Name *</label>
+            <input type="text" id="cust-name" class="form-control" required />
+          </div>
+          <div class="form-group">
+            <label>Mobile Number *</label>
+            <input type="tel" id="cust-mobile" class="form-control" placeholder="+91 ..." required />
+          </div>
+          <div class="form-group">
+            <label>Address</label>
+            <textarea id="cust-address" class="form-control" rows="2"></textarea>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" onclick="closeModal('modal-add-customer')">Cancel</button>
+          <button type="submit" class="btn btn-primary">Register Customer</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- MODAL: CUSTOMER PURCHASE HISTORY -->
+  <div id="modal-customer-history" class="modal-backdrop">
+    <div class="modal-content" style="max-width:680px;">
+      <div class="modal-header">
+        <h3 class="modal-title" id="cust-history-title">Customer Purchase History</h3>
+        <button class="modal-close" onclick="closeModal('modal-customer-history')">&times;</button>
+      </div>
+      <div class="modal-body">
+        <div class="table-responsive">
+          <table class="data-table">
+            <thead>
+              <tr>
+                <th>Sale ID</th>
+                <th>Date</th>
+                <th>Items Bought</th>
+                <th>Total</th>
+              </tr>
+            </thead>
+            <tbody id="cust-history-body">
+              <!-- Populated dynamically -->
+            </tbody>
+          </table>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" onclick="closeModal('modal-customer-history')">Close</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- MODAL: ADD SUPPLIER -->
+  <div id="modal-add-supplier" class="modal-backdrop">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h3 class="modal-title">Add Supplier</h3>
+        <button class="modal-close" onclick="closeModal('modal-add-supplier')">&times;</button>
+      </div>
+      <form onsubmit="handleSaveSupplier(event)">
+        <div class="modal-body">
+          <div class="form-group">
+            <label>Contact Person Name *</label>
+            <input type="text" id="sup-name" class="form-control" required />
+          </div>
+          <div class="form-group">
+            <label>Company / Agency Name *</label>
+            <input type="text" id="sup-company" class="form-control" required />
+          </div>
+          <div class="form-group">
+            <label>Mobile Number *</label>
+            <input type="tel" id="sup-mobile" class="form-control" required />
+          </div>
+          <div class="form-group">
+            <label>Address</label>
+            <textarea id="sup-address" class="form-control" rows="2"></textarea>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" onclick="closeModal('modal-add-supplier')">Cancel</button>
+          <button type="submit" class="btn btn-primary">Save Supplier</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- MODAL: ADD PRESCRIPTION -->
+  <div id="modal-add-prescription" class="modal-backdrop">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h3 class="modal-title">Register Prescription</h3>
+        <button class="modal-close" onclick="closeModal('modal-add-prescription')">&times;</button>
+      </div>
+      <form onsubmit="handleSavePrescription(event)">
+        <div class="modal-body">
+          <div class="form-group">
+            <label>Doctor Name (with Specialization) *</label>
+            <input type="text" id="rx-doctor" class="form-control" placeholder="Dr. ..." required />
+          </div>
+          <div class="form-group">
+            <label>Patient Name *</label>
+            <input type="text" id="rx-patient" class="form-control" required />
+          </div>
+          <div class="form-group">
+            <label>Prescribed Medicines (Comma-separated) *</label>
+            <textarea id="rx-medicines" class="form-control" rows="2" placeholder="e.g. Amoxicillin 500mg, Paracetamol 650mg" required></textarea>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" onclick="closeModal('modal-add-prescription')">Cancel</button>
+          <button type="submit" class="btn btn-primary">Save Prescription</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- MODAL: INVOICE & RECEIPT VIEWER -->
+  <div id="modal-receipt" class="modal-backdrop">
+    <div class="modal-content" style="max-width:520px;">
+      <div class="modal-header">
+        <h3 class="modal-title">Receipt &amp; Tax Invoice</h3>
+        <button class="modal-close" onclick="closeModal('modal-receipt')">&times;</button>
+      </div>
+      <div class="modal-body">
+        <pre id="receipt-text-view" class="receipt-terminal"></pre>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" onclick="closeModal('modal-receipt')">Close</button>
+        <button type="button" class="btn btn-outline" onclick="downloadReceiptTxt()">📥 Download TXT</button>
+        <button type="button" class="btn btn-primary" onclick="printReceiptTerminal()">🖨️ Print Receipt</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- TOAST NOTIFICATION CONTAINER -->
+  <div id="toast-container"></div>
+
+  <!-- CONTROLLER SCRIPT -->
+  <script src="app.js"></script>
+</body>
+</html>
