@@ -5,6 +5,7 @@ Run `python backend.py --cli` to launch the Interactive Console Menu.
 """
 
 import sys
+import os
 
 if __name__ == "__main__":
     if "--cli" in sys.argv:
@@ -12,7 +13,7 @@ if __name__ == "__main__":
         main_menu()
     else:
         from server import run_server
-        port = 8000
+        port = int(os.environ.get("PORT", 8000))
         for arg in sys.argv[1:]:
             if arg.isdigit():
                 port = int(arg)

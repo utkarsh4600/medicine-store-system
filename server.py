@@ -332,7 +332,7 @@ def run_server(port: int = 8000):
 
 
 if __name__ == "__main__":
-    port = 8000
+    port = int(os.environ.get("PORT", 8000))
     if len(sys.argv) > 1:
         try:
             port = int(sys.argv[1])
