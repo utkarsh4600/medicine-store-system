@@ -1,0 +1,3 @@
+# Medicine Store Management System
+# Built with pure Python standard library (http.server, json, csv, urllib)
+# Zero external packages required.
