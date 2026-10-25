@@ -141,5 +141,30 @@
     "bill_date": "2026-10-24 20:50:07",
     "payment_method": "Cash",
     "receipt_text": "================================================\n       PHARMA-MS MEDICINE STORE RECEIPT       \n================================================\nBill ID : BILL-637B9A   Date: 2026-10-24 20:50:07\nCustomer: Rahul Sharma (ID: CUST-001)\nPayment : Cash\n------------------------------------------------\nItem Name             Qty   Rate     Total     \n------------------------------------------------\nAmoxicillin 500mg     1     85.00    85.00     \nCetirizine 10mg       1     18.00    18.00     \nOmeprazole 20mg       1     55.00    55.00     \n------------------------------------------------\nSubtotal:                           Rs.158.00\nGST (12%):                          Rs.18.96\nDiscount:                           -Rs.7.00\n================================================\nGRAND TOTAL:                        Rs.169.96\n================================================\n     Thank you for your visit! Get well soon!   \n================================================"
+  },
+  {
+    "bill_id": "BILL-2F1ED4",
+    "sale_id": "SALE-67E106",
+    "customer_name": "Utkarsh Yadav",
+    "customer_id": "CUST-C46F48",
+    "items": [
+      {
+        "medicine_id": "MED-101",
+        "name": "Paracetamol 650mg",
+        "company": "Cipla Ltd.",
+        "category": "Antipyretic / Analgesic",
+        "unit_price": 32.5,
+        "quantity": 1,
+        "line_total": 32.5
+      }
+    ],
+    "subtotal": 32.5,
+    "gst_rate": 0.18,
+    "gst": 5.85,
+    "discount": 10.0,
+    "total": 28.35,
+    "bill_date": "2026-10-24 20:59:24",
+    "payment_method": "Cash",
+    "receipt_text": "================================================\n       PHARMA-MS MEDICINE STORE RECEIPT       \n================================================\nBill ID : BILL-2F1ED4   Date: 2026-10-24 20:59:24\nCustomer: Utkarsh Yadav (ID: CUST-C46F48)\nPayment : Cash\n------------------------------------------------\nItem Name             Qty   Rate     Total     \n------------------------------------------------\nParacetamol 650mg     1     32.50    32.50     \n------------------------------------------------\nSubtotal:                           Rs.32.50\nGST (18%):                          Rs.5.85\nDiscount:                           -Rs.10.00\n================================================\nGRAND TOTAL:                        Rs.28.35\n================================================\n     Thank you for your visit! Get well soon!   \n================================================"
   }
 ]

@@ -121,5 +121,26 @@
     "total": 169.96,
     "sale_date": "2026-10-24 20:50:07",
     "prescription_id": "RX-501"
+  },
+  {
+    "sale_id": "SALE-67E106",
+    "customer_id": "CUST-C46F48",
+    "customer_name": "Utkarsh Yadav",
+    "items": [
+      {
+        "medicine_id": "MED-101",
+        "name": "Paracetamol 650mg",
+        "company": "Cipla Ltd.",
+        "category": "Antipyretic / Analgesic",
+        "unit_price": 32.5,
+        "quantity": 1,
+        "line_total": 32.5
+      }
+    ],
+    "subtotal": 32.5,
+    "gst": 5.85,
+    "total": 28.35,
+    "sale_date": "2026-10-24 20:59:24",
+    "prescription_id": null
   }
 ]
